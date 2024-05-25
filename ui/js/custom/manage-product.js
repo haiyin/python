@@ -12,7 +12,7 @@ var SingleProductModal = $("#SingleProductModal");
                         '<td>'+ product.uom_name +'</td>'+
                         '<td>'+ product.price_per_unit +'</td>'+
                         '<td><span class="btn btn-xs btn-danger delete-product">Delete</span></td>'+
-                        '<td><button type="button" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#SingleProductModal">'+
+                        '<td><button type="button" class="btn btn-sm btn-primary pull-right edit-product" data-toggle="modal" data-target="#SingleProductModal">'+
                         'Edit Product</button></td></tr>';
                 });
                 $("table").find('tbody').empty().html(table);
@@ -47,18 +47,9 @@ var SingleProductModal = $("#SingleProductModal");
             'data': JSON.stringify(requestPayload)
         });
     });
-    /*
-    $(document).on("click", ".edit-product", function (){
-        var tr = $(this).closest('tr');
-        var data = {
-            product_id : tr.data('id')
-        };
-        callApi("Edit", SingleProductApiUrl, data);
 
-    }); */
     
     $(document).on("click", ".delete-product", function (){
-        var tr = $(this).closest('tr');
         var data = {
             product_id : tr.data('id')
         };
@@ -87,13 +78,38 @@ var SingleProductModal = $("#SingleProductModal");
         });
     });
 
+    $(document).on("click", ".edit-product", function (){
+        var tr = $(this).closest('tr');
+        $("#Singleid").val(tr.data('id'));
+        $("#Singlename").val(tr.data('name'));
+        $("#Singleprice").val(tr.data('price'));     
+        $("#Singleuoms").attr('data-single-unit',tr.data('unit'));
+        var data = {
+            Singleuoms : tr.data('unit')
+         //   product_name : tr.data('name')
+        };
+
+    });
+
+    SingleProductModal.on('hide.bs.modal', function(){
+        $("#id").val('0');
+        $("#name, #unit, #price").val('');
+        productModal.find('.modal-title').text('Edit Product');
+    });
+
     SingleProductModal.on('show.bs.modal', function(){
         //JSON data by API call
         $.get(uomListApiUrl, function (response) {
             if(response) {
+                var SingleUnit = $('#Singleuoms').data('singleUnit');
                 var options = '<option value="">--Select--</option>';
                 $.each(response, function(index, uom) {
-                    options += '<option value="'+ uom.uom_id +'">'+ uom.uom_name +'</option>';
+
+                    if (SingleUnit === uom.uom_id){
+                        options += '<option value="'+ uom.uom_id +'" selected>'+ uom.uom_name +'</option>';
+                    }else{
+                        options += '<option value="'+ uom.uom_id +'">'+ uom.uom_name +'</option>';
+                    }
                 });
                 $("#Singleuoms").empty().html(options);
             }

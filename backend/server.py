@@ -66,9 +66,9 @@ def delete_product():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@app.route('/getSingleProducts', methods=['GET'])
-def get_products():
-    response = products_dao.get_single_products(connection)
+@app.route('/getSingleProduct', methods=['GET'])
+def get_single_product():
+    response = products_dao.get_single_product(connection)
     response = jsonify(response)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
