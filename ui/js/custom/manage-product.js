@@ -101,11 +101,12 @@ var SingleProductModal = $("#SingleProductModal");
         //JSON data by API call
         $.get(uomListApiUrl, function (response) {
             if(response) {
-                var SingleUnit = $('#Singleuoms').data('singleUnit');
+                var SingleUnit = $('#Singleuoms').attr('data-single-unit');
+                $('#Singleuoms option:selected').removeAttr('selected');
                 var options = '<option value="">--Select--</option>';
                 $.each(response, function(index, uom) {
 
-                    if (SingleUnit === uom.uom_id){
+                    if (SingleUnit == uom.uom_id){
                         options += '<option value="'+ uom.uom_id +'" selected>'+ uom.uom_name +'</option>';
                     }else{
                         options += '<option value="'+ uom.uom_id +'">'+ uom.uom_name +'</option>';
